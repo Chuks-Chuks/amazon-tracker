@@ -1,0 +1,7 @@
+selenium
+webdriver-manager
+pytest
+pytest-html
+fake-useragent
+python-dotenv
+psycopg2
