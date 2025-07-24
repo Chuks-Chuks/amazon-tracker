@@ -15,7 +15,7 @@ def logger(request):
     test_name = request.node.name
     return setup_logger(test_name)
 
-# chromeservice(ChromeDriverManager().install())
+# 
 @pytest.fixture
 def driver():
     ua = UserAgent()
@@ -27,8 +27,7 @@ def driver():
     chrome_options.add_argument(f'user-agent={ua.random}')
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
     chrome_options.add_experimental_option('detach', True)
-    service = chromeservice(executable_path='/usr/local/bin/chromedriver')
-    driver = webdriver.Chrome(service=service, options=chrome_options)
+    driver = webdriver.Chrome(service=chromeservice(ChromeDriverManager().install()), options=chrome_options)
     driver.maximize_window()
     yield driver
     driver.quit()
