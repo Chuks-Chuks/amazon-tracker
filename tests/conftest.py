@@ -15,16 +15,20 @@ def logger(request):
     test_name = request.node.name
     return setup_logger(test_name)
 
-
+# chromeservice(ChromeDriverManager().install())
 @pytest.fixture
 def driver():
     ua = UserAgent()
     chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument("--headless")  # Required for CI
+    chrome_options.add_argument("--no-sandbox")  # Required for CI
+    chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument('--incognito')
     chrome_options.add_argument(f'user-agent={ua.random}')
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
     chrome_options.add_experimental_option('detach', True)
-    driver = webdriver.Chrome(service=chromeservice(ChromeDriverManager().install()), options=chrome_options)
+    service = chromeservice(executable_path='/usr/local/bin/chromedriver')
+    driver = webdriver.Chrome(service=service, options=chrome_options)
     driver.maximize_window()
     yield driver
     driver.quit()
