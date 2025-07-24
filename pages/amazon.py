@@ -3,15 +3,15 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait 
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException as TE, NoSuchElementException as NE
-# import tkinter as tk
+import tkinter as tk
 import time
 from database import db
 
 
 class SearchAmazon:
     def __init__(self, driver):
-        # self.root = tk.Tk()
-        # self.screen_height = self.root.winfo_screenheight()
+        self.root = tk.Tk()
+        self.screen_height = self.root.winfo_screenheight()
         self.driver = driver
         self.url = 'https://www.amazon.com/'
         self.wait = WebDriverWait(self.driver, 30)
@@ -173,15 +173,9 @@ class SearchAmazon:
             'rating': [],
             'url': []
         }
-        last_height = self.driver.execute_script("return document.body.scrollHeight")
         while tracker < self.product_search: 
             time.sleep(2)
-            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
-            # self.driver.execute_script(f'window.scrollBy(0, {self.screen_height/15})', '')
-            new_height = self.driver.execute_script("return document.body.scrollHeight")
-            if new_height == last_height:
-                break
-            last_height = new_height
+            self.driver.execute_script(f'window.scrollBy(0, {self.screen_height/15})', '')
             product_indexes = self.driver.execute_script("""
             return Array.from(
                 document.querySelectorAll('div[data-component-type="s-search-result"][data-index]')
@@ -206,7 +200,6 @@ class SearchAmazon:
                         pass
                 else:
                     pass
-
         return product_attributes
     
 
